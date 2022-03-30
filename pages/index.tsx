@@ -1,9 +1,66 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import { useEffect, useCallback, useState, useRef } from 'react'
+import styles from '../styles/index.module.css'
 
-const Home: NextPage = () => {
+const Index: NextPage = () => {
+  const [id, setId] = useState();
+  const [data, setData] = useState();
+  const [items, setItems] = useState();
+  const [totalCount, setTotalCount] = useState();
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    window.addEventListener('message', (e) => {
+      if (
+        e.isTrusted === true &&
+        e.data.action === 'MICROCMS_GET_DEFAULT_DATA'
+      ) {
+        setId(e.data.id);
+        setData(e.data.message.data);
+        window.parent.postMessage(
+          {
+            id: e.data.id,
+            action: 'MICROCMS_UPDATE_STYLE',
+            message: {
+              height: 400,
+            }
+          },
+          'https://shibe97.microcms.io'
+        );
+      }
+    });
+  }, []);
+
+  const searchData = useCallback(() => {
+    fetch(`/api/search?keywords=${inputRef?.current?.value}`)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setItems(res.SearchResult.Items);
+        setTotalCount(res.SearchResult.TotalResultCount);
+      });
+  }, []);
+
+  const selectData = useCallback((item) => {
+    setData(item);
+    window.parent.postMessage(
+      {
+        id: id,  // iFrame識別子
+        action: 'MICROCMS_POST_DATA',
+        message: {
+          id: item.ASIN,
+          title: item.ItemInfo.Title.DisplayValue,
+          description: 'some-description',
+          updatedAt: new Date(),
+          data: item
+        }
+      },
+      'https://shibe97.microcms.io'
+    );
+  }, [id]);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -13,60 +70,58 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.tsx</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+        <div className={styles.selected}>
+          {
+            data ?
+              <div className={styles.selectedImage}>
+                <Image
+                  src={data.Images.Primary.Large.URL}
+                  alt=""
+                  width={data.Images.Primary.Large.Width}
+                  height={data.Images.Primary.Large.Height}
+                />
+                <p>{data.ItemInfo.Title.DisplayValue}</p>
+              </div>
+              :
+              <p>選択中のアイテムがありません</p>
+          }
+        </div>
+        <div className={styles.search}>
+          <div className={styles.form}>
+            <input type="text" ref={inputRef} className={styles.input} />
+            <button onClick={searchData} className={styles.button}>検索</button>
+          </div>
+          <div className={styles.result}>
+            <ul className={styles.lists}>
+              {items?.map((item) => (
+                <li key={item.ASIN} className={styles.list} onClick={() => selectData(item)}>
+                  <div className={styles.image}>
+                    <Image
+                      src={item.Images.Primary.Large.URL}
+                      alt=""
+                      width={item.Images.Primary.Large.Width}
+                      height={item.Images.Primary.Large.Height}
+                    />
+                  </div>
+                  <div>
+                    <p>{item.ItemInfo.Title.DisplayValue}</p>
+                    <ul className={styles.contributors}>
+                      {item.ItemInfo.ByLineInfo.Contributors.map((contributor, i) => (
+                        <li key={i}>
+                          {contributor.Name}
+                          （{contributor.Role}）
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
     </div>
   )
 }
 
-export default Home
+export default Index
