@@ -2,14 +2,14 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import { useEffect, useCallback, useState, useRef } from 'react'
+import { useSearch } from '../hooks/useSearch'
+import type { Item } from '../types/result';
 import styles from '../styles/index.module.css'
 
 const Index: NextPage = () => {
   const [id, setId] = useState();
-  const [data, setData] = useState();
-  const [items, setItems] = useState();
-  const [totalCount, setTotalCount] = useState();
-  const inputRef = useRef(null);
+  const [data, setData] = useState<Item>();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     window.addEventListener('message', (e) => {
@@ -33,15 +33,7 @@ const Index: NextPage = () => {
     });
   }, []);
 
-  const searchData = useCallback(() => {
-    fetch(`/api/search?keywords=${inputRef?.current?.value}`)
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        setItems(res.SearchResult.Items);
-        setTotalCount(res.SearchResult.TotalResultCount);
-      });
-  }, []);
+  const [result, error, loading, search] = useSearch(inputRef?.current?.value);
 
   const selectData = useCallback((item) => {
     setData(item);
@@ -89,11 +81,11 @@ const Index: NextPage = () => {
         <div className={styles.search}>
           <div className={styles.form}>
             <input type="text" ref={inputRef} className={styles.input} />
-            <button onClick={searchData} className={styles.button}>検索</button>
+            <button onClick={search} className={styles.button}>検索</button>
           </div>
           <div className={styles.result}>
             <ul className={styles.lists}>
-              {items?.map((item) => (
+              {result?.Items?.map((item) => (
                 <li key={item.ASIN} className={styles.list} onClick={() => selectData(item)}>
                   <div className={styles.image}>
                     <Image
