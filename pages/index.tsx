@@ -91,8 +91,13 @@ const Index: NextPage = () => {
                   <Image src="/images/icon_loading.svg" alt="" width="38" height="38" />
                 </div>
                 :
+                result?.Items.length === 0 ?
+                <div className={styles.empty}>
+                  <p>検索結果が見つかりません</p>
+                </div>
+                :
                 <ul className={styles.lists}>
-                  {result?.Items?.map((item) => (
+                  {result?.Items.map((item) => (
                     <li key={item.ASIN} className={styles.list} onClick={() => selectData(item)}>
                       <div className={styles.image}>
                         <Image
@@ -105,7 +110,7 @@ const Index: NextPage = () => {
                       <div>
                         <p>{item.ItemInfo.Title.DisplayValue}</p>
                         <ul className={styles.contributors}>
-                          {item.ItemInfo.ByLineInfo.Contributors.map((contributor, i) => (
+                          {item.ItemInfo.ByLineInfo.Contributors?.map((contributor, i) => (
                             <li key={i}>
                               {contributor.Name}
                               （{contributor.Role}）

@@ -29,8 +29,8 @@ export type Title = {
 
 export type ItemInfo = {
   ByLineInfo: {
-    Contributors: Contributor[],
-    Manufacturer: Manufacturer,
+    Contributors?: Contributor[],
+    Manufacturer?: Manufacturer,
   },
   Title: Title,
 };
@@ -59,6 +59,6 @@ export type Item = {
 
 export type Result = {
   Items: Item[],
-  SearchURL: string,
+  SearchURL?: string,
   TotalResultCount: number,
 };

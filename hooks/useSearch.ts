@@ -12,14 +12,19 @@ export const useSearch: UseSearch = (keywords) => {
     fetch(`/api/search?keywords=${keywords}`)
       .then((res) => res.json())
       .then((data) => {
-        setResult([data.SearchResult, null]);
         setLoading(false);
+        setResult([data.SearchResult || {
+          Items: [],
+          TotalResultCount: 0,
+        }, null]);
       })
       .catch((error) => {
-        setResult([null, error]);
         setLoading(false);
+        setResult([null, error]);
       });
   }, [keywords]);
+
+  console.log(result);
 
   return [...result, loading, search];
 };
