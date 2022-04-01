@@ -18,7 +18,7 @@ const Index: NextPage = () => {
         e.data.action === 'MICROCMS_GET_DEFAULT_DATA'
       ) {
         setId(e.data.id);
-        setData(e.data.message.data);
+        setData(e.data.message?.data);
         window.parent.postMessage(
           {
             id: e.data.id,
@@ -45,7 +45,7 @@ const Index: NextPage = () => {
         message: {
           id: item.ASIN,
           title: item.ItemInfo.Title.DisplayValue,
-          description: 'some-description',
+          imageUrl: item.Images.Primary.Large.URL,
           updatedAt: new Date(),
           data: item
         }
