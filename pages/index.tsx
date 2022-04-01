@@ -33,13 +33,14 @@ const Index: NextPage = () => {
     });
   }, []);
 
-  const [result, error, loading, search] = useSearch(inputRef?.current?.value);
+  const [query, setQuery] = useState<string>('');
+  const [result, error, loading, search] = useSearch(query);
 
   const selectData = useCallback((item) => {
     setData(item);
     window.parent.postMessage(
       {
-        id: id,  // iFrame識別子
+        id,  // iFrame識別子
         action: 'MICROCMS_POST_DATA',
         message: {
           id: item.ASIN,
@@ -80,35 +81,42 @@ const Index: NextPage = () => {
         </div>
         <div className={styles.search}>
           <div className={styles.form}>
-            <input type="text" ref={inputRef} className={styles.input} />
+            <input type="text" onChange={(e) => setQuery(e.target.value)} className={styles.input} />
             <button onClick={search} className={styles.button}>検索</button>
           </div>
           <div className={styles.result}>
-            <ul className={styles.lists}>
-              {result?.Items?.map((item) => (
-                <li key={item.ASIN} className={styles.list} onClick={() => selectData(item)}>
-                  <div className={styles.image}>
-                    <Image
-                      src={item.Images.Primary.Large.URL}
-                      alt=""
-                      width={item.Images.Primary.Large.Width}
-                      height={item.Images.Primary.Large.Height}
-                    />
-                  </div>
-                  <div>
-                    <p>{item.ItemInfo.Title.DisplayValue}</p>
-                    <ul className={styles.contributors}>
-                      {item.ItemInfo.ByLineInfo.Contributors.map((contributor, i) => (
-                        <li key={i}>
-                          {contributor.Name}
-                          （{contributor.Role}）
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </li>
-              ))}
-            </ul>
+            {
+              loading ?
+                <div className={styles.loading}>
+                  <Image src="/images/icon_loading.svg" alt="" width="38" height="38" />
+                </div>
+                :
+                <ul className={styles.lists}>
+                  {result?.Items?.map((item) => (
+                    <li key={item.ASIN} className={styles.list} onClick={() => selectData(item)}>
+                      <div className={styles.image}>
+                        <Image
+                          src={item.Images.Primary.Large.URL}
+                          alt=""
+                          width={item.Images.Primary.Large.Width}
+                          height={item.Images.Primary.Large.Height}
+                        />
+                      </div>
+                      <div>
+                        <p>{item.ItemInfo.Title.DisplayValue}</p>
+                        <ul className={styles.contributors}>
+                          {item.ItemInfo.ByLineInfo.Contributors.map((contributor, i) => (
+                            <li key={i}>
+                              {contributor.Name}
+                              （{contributor.Role}）
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+            }
           </div>
         </div>
       </main>

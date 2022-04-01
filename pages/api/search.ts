@@ -20,7 +20,7 @@ export default function handler(
   amazonPaApi.SearchItems(params, {
     Keywords: keywords,
     SearchIndex: 'Books',
-    ItemCount: 10,
+    ItemCount: 20,
     Resources: [
       'Images.Primary.Large',
       'ItemInfo.Title',

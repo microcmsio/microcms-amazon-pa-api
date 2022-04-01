@@ -20,6 +20,12 @@
     padding-left: 40px;
     height: 400px;
   }
+
+  .loading {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+  }
   
   .lists {
     padding-left: 0;
@@ -51,6 +57,7 @@
   
   .result {
     overflow: auto;
+    flex: 1;
   }
   
   .input {
