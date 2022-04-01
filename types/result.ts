@@ -49,7 +49,7 @@ export type Listing = {
 
 export type Item = {
   ASIN: string,
-  DetailPageURL: Price,
+  DetailPageURL: string,
   Images: Images,
   ItemInfo: ItemInfo,
   Offers: {
