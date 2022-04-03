@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Image from 'next/image'
-import { useEffect, useCallback, useState, useRef } from 'react'
+import { useEffect, useCallback, useState } from 'react'
 import { useSearch } from '../hooks/useSearch'
 import type { Item } from '../types/result';
 import styles from '../styles/index.module.css'
@@ -25,7 +25,7 @@ const Index: NextPage = () => {
               height: 400,
             }
           },
-          'https://shibe97.microcms.io'
+          `https://${process.env.NEXT_PUBLIC_SERVICE_ID}.microcms.io`
         );
       }
     });
@@ -48,9 +48,18 @@ const Index: NextPage = () => {
           data: item
         }
       },
-      'https://shibe97.microcms.io'
+      `https://${process.env.NEXT_PUBLIC_SERVICE_ID}.microcms.io`
     );
   }, [id]);
+
+  const onKeyDown = useCallback(
+    (e) => {
+      if (e.keyCode === 13) {
+        search();
+      }
+    },
+    [search]
+  );
 
   return (
     <div className={styles.container}>
@@ -73,7 +82,7 @@ const Index: NextPage = () => {
         </div>
         <div className={styles.search}>
           <div className={styles.form}>
-            <input type="text" onChange={(e) => setQuery(e.target.value)} className={styles.input} />
+            <input type="text" onChange={(e) => setQuery(e.target.value)} onKeyDown={onKeyDown} className={styles.input} />
             <button onClick={search} className={styles.button}>検索</button>
           </div>
           <div className={styles.result}>
