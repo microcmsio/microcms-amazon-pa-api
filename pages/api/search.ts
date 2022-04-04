@@ -18,7 +18,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     .SearchItems(params, {
       Keywords: keywords,
       SearchIndex: 'Books',
-      ItemCount: 20,
+      ItemCount: 10,
       Resources: [
         'Images.Primary.Large',
         'ItemInfo.Title',
