@@ -77,7 +77,7 @@ const Index: NextPage = () => {
                 width={data.Images.Primary.Large.Width}
                 height={data.Images.Primary.Large.Height}
               />
-              <p>{data.ItemInfo.Title.DisplayValue}</p>
+              <p className={styles.title}>{data.ItemInfo.Title.DisplayValue}</p>
             </div>
           ) : (
             <p>選択中のアイテムがありません</p>

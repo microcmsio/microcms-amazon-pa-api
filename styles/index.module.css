@@ -1,7 +1,7 @@
 .container {
-    height: 400px;
-  }
-  
+  height: 400px;
+}
+
 .main {
   display: flex;
   align-items: flex-start;
@@ -10,7 +10,9 @@
 .selected {
   background-color: #f8f9fd;
   width: 200px;
+  height: 400px;
   padding: 16px;
+  overflow: auto;
 }
 
 .search {
@@ -32,6 +34,10 @@
 .result {
   overflow: auto;
   flex: 1;
+}
+
+.title {
+  font-size: 14px;
 }
 
 .input {
