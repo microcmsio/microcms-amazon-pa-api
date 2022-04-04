@@ -1,10 +1,10 @@
-import type { NextPage } from 'next'
-import Image from 'next/image'
-import { useEffect, useCallback, useState } from 'react'
-import { useSearch } from '../hooks/useSearch'
-import Result from '../components/Result'
+import type { NextPage } from 'next';
+import Image from 'next/image';
+import { useEffect, useCallback, useState } from 'react';
+import { useSearch } from '../hooks/useSearch';
+import Result from '../components/Result';
 import type { Item } from '../types/result';
-import styles from '../styles/index.module.css'
+import styles from '../styles/index.module.css';
 
 const Index: NextPage = () => {
   const [id, setId] = useState();
@@ -24,7 +24,7 @@ const Index: NextPage = () => {
             action: 'MICROCMS_UPDATE_STYLE',
             message: {
               height: 400,
-            }
+            },
           },
           `https://${process.env.NEXT_PUBLIC_SERVICE_ID}.microcms.io`
         );
@@ -35,23 +35,26 @@ const Index: NextPage = () => {
   const [query, setQuery] = useState<string>('');
   const [result, error, loading, search] = useSearch(query);
 
-  const selectData = useCallback((item) => {
-    setData(item);
-    window.parent.postMessage(
-      {
-        id,  // iFrame識別子
-        action: 'MICROCMS_POST_DATA',
-        message: {
-          id: item.ASIN,
-          title: item.ItemInfo.Title.DisplayValue,
-          imageUrl: item.Images.Primary.Large.URL,
-          updatedAt: new Date(),
-          data: item
-        }
-      },
-      `https://${process.env.NEXT_PUBLIC_SERVICE_ID}.microcms.io`
-    );
-  }, [id]);
+  const selectData = useCallback(
+    (item) => {
+      setData(item);
+      window.parent.postMessage(
+        {
+          id, // iFrame識別子
+          action: 'MICROCMS_POST_DATA',
+          message: {
+            id: item.ASIN,
+            title: item.ItemInfo.Title.DisplayValue,
+            imageUrl: item.Images.Primary.Large.URL,
+            updatedAt: new Date(),
+            data: item,
+          },
+        },
+        `https://${process.env.NEXT_PUBLIC_SERVICE_ID}.microcms.io`
+      );
+    },
+    [id]
+  );
 
   const onKeyDown = useCallback(
     (e) => {
@@ -66,33 +69,44 @@ const Index: NextPage = () => {
     <div className={styles.container}>
       <main className={styles.main}>
         <div className={styles.selected}>
-          {
-            data ?
-              <div className={styles.selectedImage}>
-                <Image
-                  src={data.Images.Primary.Large.URL}
-                  alt=""
-                  width={data.Images.Primary.Large.Width}
-                  height={data.Images.Primary.Large.Height}
-                />
-                <p>{data.ItemInfo.Title.DisplayValue}</p>
-              </div>
-              :
-              <p>選択中のアイテムがありません</p>
-          }
+          {data ? (
+            <div className={styles.selectedImage}>
+              <Image
+                src={data.Images.Primary.Large.URL}
+                alt=""
+                width={data.Images.Primary.Large.Width}
+                height={data.Images.Primary.Large.Height}
+              />
+              <p>{data.ItemInfo.Title.DisplayValue}</p>
+            </div>
+          ) : (
+            <p>選択中のアイテムがありません</p>
+          )}
         </div>
         <div className={styles.search}>
           <div className={styles.form}>
-            <input type="text" onChange={(e) => setQuery(e.target.value)} onKeyDown={onKeyDown} className={styles.input} />
-            <button onClick={search} className={styles.button}>検索</button>
+            <input
+              type="text"
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={onKeyDown}
+              className={styles.input}
+            />
+            <button onClick={search} className={styles.button}>
+              検索
+            </button>
           </div>
           <div className={styles.result}>
-            <Result result={result} error={error} loading={loading} selectData={selectData} />
+            <Result
+              result={result}
+              error={error}
+              loading={loading}
+              selectData={selectData}
+            />
           </div>
         </div>
       </main>
     </div>
-  )
-}
+  );
+};
 
-export default Index
+export default Index;

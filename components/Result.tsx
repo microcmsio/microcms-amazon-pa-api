@@ -1,6 +1,6 @@
-import Image from 'next/image'
+import Image from 'next/image';
 import type { Item, Result } from '../types/result';
-import styles from '../styles/result.module.css'
+import styles from '../styles/result.module.css';
 
 type Props = {
   result: Result | null;
@@ -9,12 +9,7 @@ type Props = {
   selectData: (item: Item) => void;
 };
 
-const Index: React.VFC<Props> = ({
-  result,
-  error,
-  loading,
-  selectData
-}) => {
+const Index: React.VFC<Props> = ({ result, error, loading, selectData }) => {
   if (loading) {
     return (
       <div className={styles.loading}>
@@ -39,7 +34,11 @@ const Index: React.VFC<Props> = ({
   return (
     <ul className={styles.lists}>
       {result?.Items.map((item: Item) => (
-        <li key={item.ASIN} className={styles.list} onClick={() => selectData(item)}>
+        <li
+          key={item.ASIN}
+          className={styles.list}
+          onClick={() => selectData(item)}
+        >
           <div className={styles.image}>
             <Image
               src={item.Images.Primary.Large.URL}
@@ -53,8 +52,7 @@ const Index: React.VFC<Props> = ({
             <ul className={styles.contributors}>
               {item.ItemInfo.ByLineInfo.Contributors?.map((contributor, i) => (
                 <li key={i}>
-                  {contributor.Name}
-                  （{contributor.Role}）
+                  {contributor.Name}（{contributor.Role}）
                 </li>
               ))}
             </ul>
@@ -62,7 +60,7 @@ const Index: React.VFC<Props> = ({
         </li>
       ))}
     </ul>
-  )
-}
+  );
+};
 
-export default Index
+export default Index;

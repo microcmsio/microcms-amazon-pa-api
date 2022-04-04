@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next';
 import amazonPaApi from 'amazon-paapi';
 
 const params = {
@@ -9,29 +9,27 @@ const params = {
   Marketplace: process.env.MARKET_PLACE,
 };
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-  ) {
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const {
-    query: { keywords }
+    query: { keywords },
   } = req;
 
-  amazonPaApi.SearchItems(params, {
-    Keywords: keywords,
-    SearchIndex: 'Books',
-    ItemCount: 20,
-    Resources: [
-      'Images.Primary.Large',
-      'ItemInfo.Title',
-      'ItemInfo.ByLineInfo',
-      'Offers.Listings.Price',
-    ],
-  })
-  .then((data: any) => {
-    res.status(200).json(data); 
-  })
-  .catch((error: any) => {
-    res.status(500).send(error); 
-  });
+  amazonPaApi
+    .SearchItems(params, {
+      Keywords: keywords,
+      SearchIndex: 'Books',
+      ItemCount: 20,
+      Resources: [
+        'Images.Primary.Large',
+        'ItemInfo.Title',
+        'ItemInfo.ByLineInfo',
+        'Offers.Listings.Price',
+      ],
+    })
+    .then((data: any) => {
+      res.status(200).json(data);
+    })
+    .catch((error: any) => {
+      res.status(500).send(error);
+    });
 }
