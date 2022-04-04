@@ -29,7 +29,5 @@ export const useSearch: UseSearch = (keywords) => {
       });
   }, [keywords]);
 
-  console.log(result);
-
   return [...result, loading, search];
 };
