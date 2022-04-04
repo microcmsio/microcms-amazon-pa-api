@@ -1,9 +1,9 @@
 import Image from 'next/image'
-import type { Item } from '../types/result';
+import type { Item, Result } from '../types/result';
 import styles from '../styles/result.module.css'
 
 type Props = {
-  result: any;
+  result: Result | null;
   error: any;
   loading: boolean;
   selectData: (item: Item) => void;
@@ -24,7 +24,7 @@ const Index: React.VFC<Props> = ({
   }
   if (error) {
     return (
-      <div className={styles.empty}>
+      <div className={styles.error}>
         <p>エラーが発生しました</p>
       </div>
     );

@@ -61,4 +61,4 @@ export type Result = {
   Items: Item[],
   SearchURL?: string,
   TotalResultCount: number,
-};
+} | null;
