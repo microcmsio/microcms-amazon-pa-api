@@ -1,0 +1,41 @@
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.empty, .error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #9393b2;
+}
+
+.lists {
+  padding-left: 0;
+}
+
+.list {
+  display: flex;
+  list-style: none;
+  padding: 16px 0;
+}
+
+.list:hover {
+  background-color: #f2fcff;
+  cursor: pointer;
+}
+
+.image {
+  max-width: 80px;
+  margin-right: 24px;
+}
+
+.contributors {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color:  #68688a;
+}

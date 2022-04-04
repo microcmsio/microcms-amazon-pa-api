@@ -2,6 +2,7 @@ import type { NextPage } from 'next'
 import Image from 'next/image'
 import { useEffect, useCallback, useState } from 'react'
 import { useSearch } from '../hooks/useSearch'
+import Result from '../components/Result'
 import type { Item } from '../types/result';
 import styles from '../styles/index.module.css'
 
@@ -86,43 +87,7 @@ const Index: NextPage = () => {
             <button onClick={search} className={styles.button}>検索</button>
           </div>
           <div className={styles.result}>
-            {
-              loading ?
-                <div className={styles.loading}>
-                  <Image src="/images/icon_loading.svg" alt="" width="38" height="38" />
-                </div>
-                :
-                result?.Items.length === 0 ?
-                <div className={styles.empty}>
-                  <p>検索結果が見つかりません</p>
-                </div>
-                :
-                <ul className={styles.lists}>
-                  {result?.Items.map((item) => (
-                    <li key={item.ASIN} className={styles.list} onClick={() => selectData(item)}>
-                      <div className={styles.image}>
-                        <Image
-                          src={item.Images.Primary.Large.URL}
-                          alt=""
-                          width={item.Images.Primary.Large.Width}
-                          height={item.Images.Primary.Large.Height}
-                        />
-                      </div>
-                      <div>
-                        <p>{item.ItemInfo.Title.DisplayValue}</p>
-                        <ul className={styles.contributors}>
-                          {item.ItemInfo.ByLineInfo.Contributors?.map((contributor, i) => (
-                            <li key={i}>
-                              {contributor.Name}
-                              （{contributor.Role}）
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-            }
+            <Result result={result} error={error} loading={loading} selectData={selectData} />
           </div>
         </div>
       </main>
