@@ -1,34 +1,50 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# microcms-amazon-pa-api
 
-## Getting Started
+## 機能
 
-First, run the development server:
+- Amazon の書籍検索
+- 商品を選択し、microCMS 側に保存
 
-```bash
-npm run dev
-# or
-yarn dev
+## 技術構成
+
+- Next.js
+- ESLint
+- Prettier
+
+## 環境変数
+
+プロジェクトルートに`.env.local`ファイルを作成し、以下の項目を設定してください。
+
+- ACCESS_KEY（Amazon Product Advertising API のアクセスキー）
+- SECRET_KEY（Amazon Product Advertising API のシークレットキー）
+- PARTNER_TAG（アソシエイトタグ）
+- PARTNER_TYPE（パートナータイプ）
+- MARKET_PLACE（マーケットプレイス）
+- NEXT_PUBLIC_SERVICE_ID（連携する microCMS のサービス ID）
+
+例：
+
+```
+ACCESS_KEY=xxxxxxxxxxxxxxxxxxxx
+SECRET_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+PARTNER_TAG=xxxxxxx-xx
+PARTNER_TYPE=Associates
+MARKET_PLACE=www.amazon.co.jp
+NEXT_PUBLIC_SERVICE_ID=xxxxxxx
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 開発方法
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```bash
+# パッケージをインストール
+$ npm install
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+# 開発サーバーを起動（localhost:3000）
+$ npm run dev
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+microCMS の iFrame フィールドにて`http://localhost:3000`を指定することでデバッグ可能です。
 
-## Learn More
+## ライセンス
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Apache License 2.0
